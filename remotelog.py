@@ -1,8 +1,9 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
+from flask.ext.paginate import Pagination
 from sqlalchemy import *
 from sqlalchemy import event
 from sqlalchemy.orm import *
-import os
+import os, pdb
 
 # ORM initialization
 metadata = MetaData()
@@ -47,15 +48,40 @@ mapper(Log, log_table)
 
 # flask app initialization
 app = Flask(__name__)
+app.debug = True
 
-@app.route("/log/<appname>",methods=['POST',])
-def store_log(appname):
+@app.route("/view_log/<appSlug>",methods=['GET',])
+def viewlog(appSlug):
+    db = Session()
+    search = False
+
+
+    q = request.args.get('q')
+    if q:
+        search = True
+
+    #dboperation.query(model.System).get(tw_sys_id)
+    logrecords = db.query(Log).filter_by(AppSlug = appSlug).order_by(desc(Log.CreatedDate)).all()
+
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
+
+    pagination = Pagination(page=page, total=logrecords.__len__(), search=search, record_name='logrecords')
+    return render_template('view_log.html',
+                           logrecords=logrecords,
+                           pagination=pagination,
+                           )
+
+@app.route("/log/<appSlug>",methods=['POST',])
+def store_log(appSlug):
 
     d = request.form
     db = Session()
 
     log = Log()
-    log.AppSlug = appname
+    log.AppSlug = appSlug
     log.relativeCreated = d['relativeCreated']
     log.process = d['process']
     log.args = d['args']
