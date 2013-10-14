@@ -1,28 +1,6 @@
 {% extends 'template.html' %}
 {% block content %}
 
-  <style>
-    .pagination-page-info {
-      padding: .6em;
-      padding-left: 0;
-      width: 40em;
-      margin: .5em;
-      margin-left: 0;
-      font-size: 12px;
-  }
-  .pagination-page-info b {
-      color: black;
-      background: #6aa6ed;
-      padding-left: 2px;
-      padding: .1em .25em;
-      font-size: 150%;
-  }
-
-  </style>
-
-  {{ pagination.info|safe }}
-  {{ pagination.links|safe }}
-
   <table class="table table-striped table-hover table-rounded table-bordered table-condensed">
     <thead>
       <tr>
@@ -42,7 +20,6 @@
     </tbody>
   </table>
 
-  {{ pagination.links|safe }}
 
 
 {% endblock %}

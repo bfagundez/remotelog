@@ -50,29 +50,15 @@ mapper(Log, log_table)
 app = Flask(__name__)
 app.debug = True
 
-@app.route("/view_log/<appSlug>",methods=['GET',])
+@app.route("/view_log/<appSlug>")
 def viewlog(appSlug):
+
     db = Session()
-    search = False
-
-
-    q = request.args.get('q')
-    if q:
-        search = True
 
     #dboperation.query(model.System).get(tw_sys_id)
-    logrecords = db.query(Log).filter_by(AppSlug = appSlug).order_by(desc(Log.CreatedDate)).all()
+    logrecords = db.query(Log).filter_by(AppSlug = appSlug).order_by(desc(Log.CreatedDate)).limit(200).all()
 
-    try:
-        page = int(request.args.get('page', 1))
-    except ValueError:
-        page = 1
-
-    pagination = Pagination(page=page, total=logrecords.__len__(), search=search, record_name='logrecords')
-    return render_template('view_log.html',
-                           logrecords=logrecords,
-                           pagination=pagination,
-                           )
+    return render_template('view_log.html',logrecords=logrecords)
 
 @app.route("/log/<appSlug>",methods=['POST',])
 def store_log(appSlug):
