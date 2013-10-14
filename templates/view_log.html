@@ -6,7 +6,7 @@
       <tr>
         <th class="col-md-2">CreatedDate</th>
         <th>Message</th>
-        <th class="col-md-1">Line #</th>
+        <th class="col-md-2">where</th>
       </tr>
     </thead>
     <tbody>
@@ -14,7 +14,7 @@
         <tr>
           <td>{{ lr.CreatedDate }}</td>
           <td>{{ lr.msg }}</td>
-          <td>{{ lr.lineno }}</td>
+          <td>{{ lr.pathname }} ({{ lr.lineno }})</td>
         </tr>
       {% endfor %}
     </tbody>

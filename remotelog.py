@@ -48,7 +48,7 @@ mapper(Log, log_table)
 
 # flask app initialization
 app = Flask(__name__)
-app.debug = True
+#app.debug = True
 
 @app.route("/view_log/<appSlug>")
 def viewlog(appSlug):
